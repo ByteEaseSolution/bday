@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 Happy Birthday! 🎂</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        .layer.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .video-layer video {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+        }
+
+        .text-layer {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #ffa07a 100%);
+            padding: 20px;
+        }
+
+        .text-content {
+            text-align: center;
+            color: white;
+            max-width: 90%;
+        }
+
+        .text-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .text-content p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            animation: slideIn 1s ease-out;
+        }
+
+        .emoji {
+            font-size: 3rem;
+            margin: 20px 0;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 1000;
+            animation: fall 3s linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Swipe hint */
+        .swipe-hint {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 0.9rem;
+            z-index: 1001;
+            text-align: center;
+            animation: pulse 2s infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .swipe-hint.hidden {
+            display: none;
+        }
+
+        /* Balloons */
+        .balloons-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .balloon {
+            position: absolute;
+            font-size: 3rem;
+            animation: floatUp 6s ease-in infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120vh) rotate(20deg);
+                opacity: 0.8;
+            }
+        }
+
+        /* Retro Question Box */
+        .question-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            border: 4px solid #fff;
+            box-shadow: 
+                0 0 0 4px #000,
+                0 0 0 8px #fff,
+                8px 8px 0 8px rgba(0,0,0,0.3);
+            padding: 20px;
+            z-index: 2000;
+            max-width: 320px;
+            width: 90%;
+            font-family: 'Courier New', monospace;
+        }
+
+        .question-text {
+            color: #0f0;
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px #003300;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.7; }
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .retro-button {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 12px 30px;
+            border: 3px solid #fff;
+            background: #000;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 4px 4px 0 rgba(255,255,255,0.5);
+            transition: all 0.1s;
+        }
+
+        .retro-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(255,255,255,0.5);
+        }
+
+        .yes-button {
+            color: #0f0;
+            border-color: #0f0;
+        }
+
+        .no-button {
+            color: #f00;
+            border-color: #f00;
+        }
+
+        /* Angry Cats */
+        .angry-cats {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1500;
+        }
+
+        .angry-cat {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border: 2px solid #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Photo Collage Layer */
+        .photo-layer {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            overflow: hidden;
+        }
+
+        .photo-collage {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .photo-item {
+            position: absolute;
+            border: 3px solid white;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+            animation: photoFloat 3s ease-in-out infinite;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        @keyframes photoFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(2deg);
+            }
+        }
+
+        .love-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.0rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 
+                4px 4px 0 #ff1493,
+                8px 8px 0 #ff69b4,
+                12px 12px 20px rgba(0,0,0,0.5);
+            z-index: 100;
+            animation: heartbeat 2s ease-in-out infinite;
+            font-family: 'Arial', sans-serif;
+            letter-spacing: 5px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            25% {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_0d1adb292c.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="swipe-hint" id="swipeHint">
+        Swipe up to continue ↑<br>
+        <small>Tap to start</small>
+    </div>
+
+    <div class="container" id="container">
+        <!-- Layer 1: First Video -->
+        <div class="layer video-layer active" data-index="0">
+            <video id="video1" playsinline muted loop>
+                <source src="https://drive.google.com/uc?export=download&id=1m1ioe3V4XSwQ5cYwjyz2YGxZ3wA405UW" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- Layer 2: First Text -->
+        <div class="layer text-layer" data-index="1">
+            <div class="text-content">
+                <span class="emoji">🎂</span>
+                <h1>Happy Birthday!</h1>
+                <p>Today is your special day, and we're so grateful to celebrate another year of your amazing journey. May this year bring you endless joy, laughter, and unforgettable memories!</p>
+            </div>
+        </div>
+
+        <!-- Layer 3: Photo Collage - I Love You -->
+        <div class="layer photo-layer" data-index="2">
+            <div class="photo-collage" id="photoCollage">
+                <!-- Photos will be added here via JavaScript -->
+            </div>
+            <div class="love-text">I Love You</div>
+        </div>
+
+        <!-- Layer 4: Second Video -->
+        <div class="layer video-layer" data-index="3">
+            <video id="video2" playsinline muted loop>
+                <source src="https://cdn.pixabay.com/video/2021/08/23/86481-593668634_tiny.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- Layer 5: Second Text -->
+        <div class="layer text-layer" data-index="4">
+            <div class="text-content">
+                <span class="emoji">🎉</span>
+                <h1>Make a Wish!</h1>
+                <p>As you blow out the candles, may all your dreams come true. Here's to new adventures, cherished moments, and a year filled with love and happiness!</p>
+            </div>
+        </div>
+
+        <!-- Layer 6: Final Video -->
+        <div class="layer video-layer" data-index="5">
+            <video id="video3" playsinline muted loop>
+                <source src="https://cdn.pixabay.com/video/2021/04/06/70456-536034706_tiny.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- Layer 7: Final Text with Balloons -->
+        <div class="layer text-layer" data-index="6" id="finalLayer">
+            <div class="text-content">
+                <span class="emoji">🎈</span>
+                <h1>Celebrate You!</h1>
+                <p>You deserve all the happiness in the world. Thank you for being you. Here's to another amazing year ahead!</p>
+                <p style="margin-top: 30px; font-size: 2rem;">🎊 Cheers! 🥳</p>
+            </div>
+            
+            <!-- Balloons -->
+            <div class="balloons-container"></div>
+            
+            <!-- Retro Question Box -->
+            <div class="question-box" id="questionBox">
+                <div class="question-text" id="questionText">Do you love me? 💕</div>
+                <div class="button-container">
+                    <button class="retro-button yes-button" id="yesButton">YES</button>
+                    <button class="retro-button no-button" id="noButton">NO</button>
+                </div>
+            </div>
+            
+            <!-- Angry cats container -->
+            <div class="angry-cats" id="angryCats"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const layers = document.querySelectorAll('.layer');
+        const totalLayers = layers.length;
+        let touchStartY = 0;
+        let touchEndY = 0;
+        let isAnimating = false;
+        let musicStarted = false;
+        const bgMusic = document.getElementById('bgMusic');
+        const swipeHint = document.getElementById('swipeHint');
+
+        // Start music on first interaction
+        function startMusic() {
+            if (!musicStarted) {
+                bgMusic.play().catch(e => console.log('Audio play failed:', e));
+                musicStarted = true;
+                swipeHint.innerHTML = 'Swipe up to continue ↑';
+            }
+        }
+
+        // Play current video
+        function playCurrentVideo() {
+            const currentLayer = layers[currentIndex];
+            if (currentLayer.classList.contains('video-layer')) {
+                const video = currentLayer.querySelector('video');
+                video.play().catch(e => console.log('Video play failed:', e));
+            }
+        }
+
+        // Photo collage setup
+        const photoCollage = document.getElementById('photoCollage');
+        
+        // Replace these with your actual photo paths
+        const photos = [
+            'https://drive.google.com/thumbnail?id=1B0awBTQvQQCYPoX7CrI_8QGAp8iIHw8S&sz=w1000',
+            'https://drive.google.com/thumbnail?id=13kkEcfRNiJyMSGR6A993RO2-vWjLcGpg&sz=w1000',
+            'https://drive.google.com/thumbnail?id=16GC1To6jCNS-6QBkARsCoKVNSuOR9upI&sz=w1000',
+            'https://drive.google.com/thumbnail?id=13YAfnzuVC1T1UmbvBZZFFcUaN02yJYEx&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1gUKhub-IyJAYvI1tbS1knE-WFbzh94rL&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1aZIFB_z9C9XEenMsyB0KcyfB-m3Nff_I&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1kROhit_0mjIgtjoSAeUcIeokOh7L8YZi&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1tXNzKQUidWIjTBAQ-gGq66W-U29ZbBSc&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1rgZZvxB325v88LT7iI5nUqfOz6XbhnnN&sz=w1000',
+            'https://drive.google.com/thumbnail?id=12bSYSNCdfsoh65DoxxcjB0LxODp6AyTW&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1jTYuPl0Mkii55Byyo9IDRnhb3y3PmgHX&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1jVFz3LUfYF8-W6RQcWSgY56dIts17Hyf&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1elGZDf4LOhAD41EVe4uHhpn72ifB2kxY&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1wcw5SjXYAJlHl7F5LyrTJMsXErAT92KD&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1AYbT6SfFFOkBA2q4Gn_dNw2Z8NEVjyn0&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1ndQwYBZeceQnmkxD_sRIu-XQHWvsHq4P&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1SrONyjHk8SG3k7U5VklVZua-2Z9X0XpG&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1V1iTMBcy1fxMTuVkQPzRu4MGLlcw8268&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1WlGof9gfP6UUbugkh9Lpt4iPkmDHL72k&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1i1Vr2bHnn2CNsCIgoax4gmHf5eiqEpda&sz=w1000',
+            'https://drive.google.com/thumbnail?id=1qOparn2ULVHkfZyahJcZfHdvaYyLJU3d&sz=w1000',
+        ];
+        function createPhotoCollage() {
+    photoCollage.innerHTML = "";
+
+    const positions = [];
+    const containerWidth = photoCollage.offsetWidth;
+    const containerHeight = photoCollage.offsetHeight;
+
+    photos.forEach(photo => {
+        const photoDiv = document.createElement("div");
+        photoDiv.className = "photo-item";
+
+        // Random size (mobile friendly)
+        const size = Math.random() * 40 + 70;
+        photoDiv.style.width = size + "px";
+        photoDiv.style.height = size + "px";
+
+        let left, top, attempts = 0;
+        let overlap;
+
+        do {
+            attempts++;
+
+            // Base random placement
+            left = Math.random() * (containerWidth - size);
+            top = Math.random() * (containerHeight - size);
+
+            // ADD ORGANIC "JITTER" so they don't feel aligned
+            left += (Math.random() - 0.5) * 30;  // ±15px wobble
+            top += (Math.random() - 0.5) * 30;   // ±15px wobble
+
+            // Keep inside container
+            left = Math.max(0, Math.min(left, containerWidth - size));
+            top = Math.max(0, Math.min(top, containerHeight - size));
+
+            // Check overlap using true bounding-box
+            overlap = positions.some(pos => {
+                const padding = 8; // prevent touching
+                return !(
+                    left + size + padding < pos.left ||
+                    left > pos.left + pos.size + padding ||
+                    top + size + padding < pos.top ||
+                    top > pos.top + pos.size + padding
+                );
+            });
+
+        } while (overlap && attempts < 200);
+
+        // Save position
+        positions.push({ left, top, size });
+
+        photoDiv.style.left = left + "px";
+        photoDiv.style.top = top + "px";
+
+        // Random rotation (keeps messy feel)
+        const rotation = Math.random() * 40 - 20;
+        photoDiv.style.transform = `rotate(${rotation}deg)`;
+
+        // Maintain your random animation timing
+        photoDiv.style.animationDelay = Math.random() * 2 + 's';
+
+        // Random stacking
+        photoDiv.style.zIndex = Math.floor(Math.random() * 10);
+
+        const img = document.createElement("img");
+        img.src = photo;
+        img.alt = "Memory";
+        photoDiv.appendChild(img);
+
+        photoCollage.appendChild(photoDiv);
+    });
+}
+
+
+        // Initialize photo collage
+        createPhotoCollage();
+
+        // Change layer
+        function changeLayer(direction) {
+            if (isAnimating) return;
+            
+            const newIndex = currentIndex + direction;
+            
+            if (newIndex < 0 || newIndex >= totalLayers) return;
+            
+            isAnimating = true;
+            
+            // Hide swipe hint after first swipe
+            if (currentIndex === 0) {
+                swipeHint.classList.add('hidden');
+            }
+            
+            // Pause current video
+            const currentLayer = layers[currentIndex];
+            if (currentLayer.classList.contains('video-layer')) {
+                const video = currentLayer.querySelector('video');
+                video.pause();
+            }
+            
+            // Remove active class
+            currentLayer.classList.remove('active');
+            
+            // Update index
+            currentIndex = newIndex;
+            
+            // Add active class to new layer
+            const newLayer = layers[currentIndex];
+            newLayer.classList.add('active');
+            
+            // Play new video if it's a video layer
+            setTimeout(() => {
+                playCurrentVideo();
+                isAnimating = false;
+            }, 100);
+        }
+
+        // Touch events
+        document.addEventListener('touchstart', (e) => {
+            startMusic();
+            touchStartY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].clientY;
+            handleSwipe();
+        });
+
+        // Mouse events for testing on desktop
+        document.addEventListener('mousedown', (e) => {
+            startMusic();
+            touchStartY = e.clientY;
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            touchEndY = e.clientY;
+            handleSwipe();
+        });
+
+        // Handle swipe
+        function handleSwipe() {
+            const swipeDistance = touchStartY - touchEndY;
+            const minSwipeDistance = 50;
+            
+            if (Math.abs(swipeDistance) > minSwipeDistance) {
+                if (swipeDistance > 0) {
+                    // Swiped up - go to next
+                    changeLayer(1);
+                } else {
+                    // Swiped down - go to previous
+                    changeLayer(-1);
+                }
+            }
+        }
+
+        // Start first video
+        playCurrentVideo();
+
+        // Create confetti
+        function createConfetti() {
+            const colors = ['#ff0080', '#00ff80', '#0080ff', '#ffff00', '#ff00ff'];
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 100);
+            }
+        }
+
+        // Start confetti
+        createConfetti();
+        setInterval(createConfetti, 5000);
+
+        // Balloons animation
+        function createBalloon() {
+            const balloons = ['🎈', '🎈', '🎈', '🎈', '🎈'];
+            const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'pink'];
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            balloon.textContent = balloons[Math.floor(Math.random() * balloons.length)];
+            balloon.style.left = Math.random() * 90 + '%';
+            balloon.style.animationDelay = Math.random() * 2 + 's';
+            balloon.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            
+            const balloonsContainer = document.querySelector('.balloons-container');
+            if (balloonsContainer) {
+                balloonsContainer.appendChild(balloon);
+                setTimeout(() => balloon.remove(), 7000);
+            }
+        }
+
+        // Start balloons when reaching final layer
+        let balloonsInterval;
+        function startBalloons() {
+            if (!balloonsInterval) {
+                createBalloon();
+                balloonsInterval = setInterval(createBalloon, 400);
+            }
+        }
+
+        function stopBalloons() {
+            if (balloonsInterval) {
+                clearInterval(balloonsInterval);
+                balloonsInterval = null;
+            }
+        }
+
+        // Question box logic
+        const questionTexts = [
+            "Don't you love me? 😢",
+            "Please say yes! 🥺",
+            "Are you sure? 😿",
+            "Come on, just say yes! 💔",
+            "Why are you doing this? 😭",
+            "Pretty please? 🙏",
+            "I'll be sad forever! 😞",
+            "Think about it again! 💕",
+            "You're breaking my heart! 💔",
+            "Just one YES? 🥹"
+        ];
+
+        const questionBox = document.getElementById('questionBox');
+        const questionText = document.getElementById('questionText');
+        const yesButton = document.getElementById('yesButton');
+        const noButton = document.getElementById('noButton');
+        const angryCatsContainer = document.getElementById('angryCats');
+
+        // Initially hide question box
+        questionBox.style.display = 'none';
+
+        // Show question box when reaching last layer
+        function showQuestionBox() {
+            questionBox.style.display = 'block';
+        }
+
+        function hideQuestionBox() {
+            questionBox.style.display = 'none';
+        }
+
+        // Yes button click
+        yesButton.addEventListener('click', () => {
+            questionText.textContent = "Yay! I knew it! 🥰💕";
+            questionText.style.color = '#0f0';
+            noButton.style.display = 'none';
+            yesButton.textContent = '💖';
+            
+            // Celebration effect
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => createConfetti(), i * 50);
+            }
+        });
+
+        // No button click
+        let noClickCount = 0;
+        noButton.addEventListener('click', () => {
+            // Change question text
+            const randomText = questionTexts[Math.floor(Math.random() * questionTexts.length)];
+            questionText.textContent = randomText;
+            
+            // Add angry cat
+            const cat = document.createElement('div');
+            cat.className = 'angry-cat';
+            cat.textContent = '😾'; // You can replace this with img tags for your PNG files
+            // For custom images, use: cat.innerHTML = '<img src="angry-cat-1.png" style="width:100%;height:100%;">';
+            
+            cat.style.left = Math.random() * 80 + 10 + '%';
+            cat.style.top = Math.random() * 70 + 20 + '%';
+            
+            angryCatsContainer.appendChild(cat);
+            
+            noClickCount++;
+            
+            // Make YES button bigger after some clicks
+            if (noClickCount > 3) {
+                yesButton.style.fontSize = (1.2 + noClickCount * 0.2) + 'rem';
+                yesButton.style.padding = (12 + noClickCount * 2) + 'px ' + (30 + noClickCount * 5) + 'px';
+            }
+        });
+
+        // Modified changeLayer to handle balloons and question box
+        const originalChangeLayer = changeLayer;
+        changeLayer = function(direction) {
+            const newIndex = currentIndex + direction;
+            
+            // Check if moving to or from last layer
+            if (newIndex === 6) {
+                setTimeout(() => {
+                    startBalloons();
+                    showQuestionBox();
+                }, 500);
+            } else if (currentIndex === 6) {
+                stopBalloons();
+                hideQuestionBox();
+                // Clear angry cats
+                angryCatsContainer.innerHTML = '';
+            }
+            
+            originalChangeLayer(direction);
+        };
+    </script>
+</body>
+</html>
