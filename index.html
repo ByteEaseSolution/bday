@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +50,6 @@
         .video-layer video {
             width: 100%;
             height: 100vh;
-            object-fit: cover;
         }
 
         .text-layer {
@@ -344,14 +344,216 @@
                 transform: translate(-50%, -50%) scale(1);
             }
         }
+
+        /* 3D Dice Styles */
+        .dice-layer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .dice-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .dice-title {
+            color: white;
+            font-size: 2rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            text-align: center;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .dice-subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .scene {
+            width: 200px;
+            height: 200px;
+            perspective: 600px;
+            margin-bottom: 30px;
+        }
+
+        .cube {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: translateZ(-100px) rotateX(-20deg) rotateY(-20deg);
+            transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: cubeFloat 3s ease-in-out infinite;
+        }
+
+        .cube.rolling {
+            transition: transform 0.05s linear;
+            animation: none;
+        }
+
+        @keyframes cubeFloat {
+            0%, 100% {
+                transform: translateZ(-100px) rotateX(-20deg) rotateY(-20deg) translateY(0);
+            }
+            50% {
+                transform: translateZ(-100px) rotateX(-20deg) rotateY(-20deg) translateY(-20px);
+            }
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(255,255,255,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+            backdrop-filter: blur(10px);
+        }
+
+        .cube-face:hover {
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.3));
+            transform: scale(1.05);
+        }
+
+        .face-number {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .cube-face.front  { transform: rotateY(  0deg) translateZ(100px); }
+        .cube-face.back   { transform: rotateY(180deg) translateZ(100px); }
+        .cube-face.right  { transform: rotateY( 90deg) translateZ(100px); }
+        .cube-face.left   { transform: rotateY(-90deg) translateZ(100px); }
+        .cube-face.top    { transform: rotateX( 90deg) translateZ(100px); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+        .roll-button {
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            animation: slideIn 1s ease-out;
+        }
+
+        .roll-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+        }
+
+        .roll-button:active {
+            transform: translateY(0);
+        }
+
+        /* Video Modal */
+        .video-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.98);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .video-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .video-modal-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.3);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+
+        .close-modal:active {
+            background: rgba(255,255,255,0.5);
+            transform: scale(0.95);
+        }
+
+        .modal-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            padding-bottom: 177.78%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+        }
     </style>
 </head>
 <body>
-    <!-- Background Music -->
-    <audio id="bgMusic" loop>
-        <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_0d1adb292c.mp3" type="audio/mpeg">
-    </audio>
-
     <div class="swipe-hint" id="swipeHint">
         Swipe up to continue ↑<br>
         <small>Tap to start</small>
@@ -361,7 +563,7 @@
         <!-- Layer 1: First Video -->
         <div class="layer video-layer active" data-index="0">
             <video id="video1" playsinline muted loop>
-                <source src="https://drive.google.com/uc?export=download&id=1m1ioe3V4XSwQ5cYwjyz2YGxZ3wA405UW" type="video/mp4">
+                <source src="https://github.com/ByteEaseSolution/videos/raw/refs/heads/main/edit-1.mp4" type="video/mp4">
             </video>
         </div>
 
@@ -369,13 +571,17 @@
         <div class="layer text-layer" data-index="1">
             <div class="text-content">
                 <span class="emoji">🎂</span>
-                <h1>Happy Birthday!</h1>
-                <p>Today is your special day, and we're so grateful to celebrate another year of your amazing journey. May this year bring you endless joy, laughter, and unforgettable memories!</p>
+                <h1>Happiieeeee Birrrtthhdaaayyyy babyyyyy!</h1>
+                <p>Babiee again a year passed by, and you still look as pretty as before. This bday of yours would be so diff, but remember mera bachaaaa, life is all about experiences, sooooo day ko enjoy krne mai kasar mt choddna hehe...</p>
             </div>
         </div>
 
         <!-- Layer 3: Photo Collage - I Love You -->
         <div class="layer photo-layer" data-index="2">
+            <audio id="bgMusic" loop>
+                <source src="https://github.com/ByteEaseSolution/videos/raw/refs/heads/main/Taylor%20Swift%20-%20Daylight%20(Official%20Audio).mp3" type="audio/mpeg">
+            </audio>
+        
             <div class="photo-collage" id="photoCollage">
                 <!-- Photos will be added here via JavaScript -->
             </div>
@@ -384,8 +590,8 @@
 
         <!-- Layer 4: Second Video -->
         <div class="layer video-layer" data-index="3">
-            <video id="video2" playsinline muted loop>
-                <source src="https://cdn.pixabay.com/video/2021/08/23/86481-593668634_tiny.mp4" type="video/mp4">
+            <video id="video2" playsinline loop>
+                <source src="https://github.com/ByteEaseSolution/videos/raw/refs/heads/main/edit-2.mp4" type="video/mp4">
             </video>
         </div>
 
@@ -393,25 +599,60 @@
         <div class="layer text-layer" data-index="4">
             <div class="text-content">
                 <span class="emoji">🎉</span>
-                <h1>Make a Wish!</h1>
-                <p>As you blow out the candles, may all your dreams come true. Here's to new adventures, cherished moments, and a year filled with love and happiness!</p>
+                <h1>Apni wish manglena bubu!</h1>
+                <p>I really really really hope, all of your wishes/dreams come true, and I'm there with you while you achieve them!</p>
             </div>
         </div>
 
-        <!-- Layer 6: Final Video -->
-        <div class="layer video-layer" data-index="5">
-            <video id="video3" playsinline muted loop>
-                <source src="https://cdn.pixabay.com/video/2021/04/06/70456-536034706_tiny.mp4" type="video/mp4">
-            </video>
+        <!-- Layer 6: 3D Dice with Videos -->
+        <div class="layer dice-layer" data-index="5">
+            <div class="dice-container">
+                <h2 class="dice-title">🎲 Roll the Dice of Surprise! 🎲</h2>
+                <p class="dice-subtitle">Click on any face to play a special video</p>
+                <div class="scene">
+                    <div class="cube" id="cube">
+                        <div class="cube-face front" data-video="1">
+                            <span class="face-number">1</span>
+                        </div>
+                        <div class="cube-face back" data-video="2">
+                            <span class="face-number">2</span>
+                        </div>
+                        <div class="cube-face right" data-video="3">
+                            <span class="face-number">3</span>
+                        </div>
+                        <div class="cube-face left" data-video="4">
+                            <span class="face-number">4</span>
+                        </div>
+                        <div class="cube-face top" data-video="5">
+                            <span class="face-number">5</span>
+                        </div>
+                        <div class="cube-face bottom" data-video="6">
+                            <span class="face-number">6</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="roll-button" id="rollButton">🎲 Roll the Dice!</button>
+            </div>
+
+            <!-- Video Player Modal -->
+            <div class="video-modal" id="videoModal">
+                <div class="video-modal-content">
+                    <button class="close-modal" id="closeModal">✕</button>
+                    <h3 class="modal-title" id="modalTitle">Song #1</h3>
+                    <div class="video-wrapper">
+                        <iframe id="videoPlayer" frameborder="0" allowfullscreen allow="autoplay"></iframe>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Layer 7: Final Text with Balloons -->
         <div class="layer text-layer" data-index="6" id="finalLayer">
             <div class="text-content">
                 <span class="emoji">🎈</span>
-                <h1>Celebrate You!</h1>
-                <p>You deserve all the happiness in the world. Thank you for being you. Here's to another amazing year ahead!</p>
-                <p style="margin-top: 30px; font-size: 2rem;">🎊 Cheers! 🥳</p>
+                <h1>Don't forget to celebrate!</h1>
+                <p>Baby! IT'S YOUR FUCKING BIRTHDAYYYYYYYY. ENJOYY YOUURRR DAYYY TOO THEEE FULLLEESSSTTTTTTT. </p>
+                <p style="margin-top: 30px; font-size: 2rem;"> I LOVE YOU <3 </p>
             </div>
             
             <!-- Balloons -->
@@ -430,8 +671,13 @@
             <div class="angry-cats" id="angryCats"></div>
         </div>
     </div>
-
     <script>
+        document.addEventListener('click', function() {
+            const video = document.getElementById('video1');
+            video.muted = false;
+            video.play();
+        }, { once: true });
+
         let currentIndex = 0;
         const layers = document.querySelectorAll('.layer');
         const totalLayers = layers.length;
@@ -463,7 +709,6 @@
         // Photo collage setup
         const photoCollage = document.getElementById('photoCollage');
         
-        // Replace these with your actual photo paths
         const photos = [
             'https://drive.google.com/thumbnail?id=1B0awBTQvQQCYPoX7CrI_8QGAp8iIHw8S&sz=w1000',
             'https://drive.google.com/thumbnail?id=13kkEcfRNiJyMSGR6A993RO2-vWjLcGpg&sz=w1000',
@@ -487,80 +732,69 @@
             'https://drive.google.com/thumbnail?id=1i1Vr2bHnn2CNsCIgoax4gmHf5eiqEpda&sz=w1000',
             'https://drive.google.com/thumbnail?id=1qOparn2ULVHkfZyahJcZfHdvaYyLJU3d&sz=w1000',
         ];
+
         function createPhotoCollage() {
-    photoCollage.innerHTML = "";
+            startMusic();
+            photoCollage.innerHTML = "";
 
-    const positions = [];
-    const containerWidth = photoCollage.offsetWidth;
-    const containerHeight = photoCollage.offsetHeight;
+            const positions = [];
+            const containerWidth = photoCollage.offsetWidth;
+            const containerHeight = photoCollage.offsetHeight;
 
-    photos.forEach(photo => {
-        const photoDiv = document.createElement("div");
-        photoDiv.className = "photo-item";
+            photos.forEach(photo => {
+                const photoDiv = document.createElement("div");
+                photoDiv.className = "photo-item";
 
-        // Random size (mobile friendly)
-        const size = Math.random() * 40 + 70;
-        photoDiv.style.width = size + "px";
-        photoDiv.style.height = size + "px";
+                const size = Math.random() * 40 + 70;
+                photoDiv.style.width = size + "px";
+                photoDiv.style.height = size + "px";
 
-        let left, top, attempts = 0;
-        let overlap;
+                let left, top, attempts = 0;
+                let overlap;
 
-        do {
-            attempts++;
+                do {
+                    attempts++;
+                    left = Math.random() * (containerWidth - size);
+                    top = Math.random() * (containerHeight - size);
 
-            // Base random placement
-            left = Math.random() * (containerWidth - size);
-            top = Math.random() * (containerHeight - size);
+                    left += (Math.random() - 0.5) * 30;
+                    top += (Math.random() - 0.5) * 30;
 
-            // ADD ORGANIC "JITTER" so they don't feel aligned
-            left += (Math.random() - 0.5) * 30;  // ±15px wobble
-            top += (Math.random() - 0.5) * 30;   // ±15px wobble
+                    left = Math.max(0, Math.min(left, containerWidth - size));
+                    top = Math.max(0, Math.min(top, containerHeight - size));
 
-            // Keep inside container
-            left = Math.max(0, Math.min(left, containerWidth - size));
-            top = Math.max(0, Math.min(top, containerHeight - size));
+                    overlap = positions.some(pos => {
+                        const padding = 8;
+                        return !(
+                            left + size + padding < pos.left ||
+                            left > pos.left + pos.size + padding ||
+                            top + size + padding < pos.top ||
+                            top > pos.top + pos.size + padding
+                        );
+                    });
 
-            // Check overlap using true bounding-box
-            overlap = positions.some(pos => {
-                const padding = 8; // prevent touching
-                return !(
-                    left + size + padding < pos.left ||
-                    left > pos.left + pos.size + padding ||
-                    top + size + padding < pos.top ||
-                    top > pos.top + pos.size + padding
-                );
+                } while (overlap && attempts < 200);
+
+                positions.push({ left, top, size });
+
+                photoDiv.style.left = left + "px";
+                photoDiv.style.top = top + "px";
+
+                const rotation = Math.random() * 40 - 20;
+                photoDiv.style.transform = `rotate(${rotation}deg)`;
+
+                photoDiv.style.animationDelay = Math.random() * 2 + 's';
+                photoDiv.style.zIndex = Math.floor(Math.random() * 10);
+
+                const img = document.createElement("img");
+                img.src = photo;
+                img.alt = "Song";
+                photoDiv.appendChild(img);
+
+                photoCollage.appendChild(photoDiv);
             });
+        }
 
-        } while (overlap && attempts < 200);
-
-        // Save position
-        positions.push({ left, top, size });
-
-        photoDiv.style.left = left + "px";
-        photoDiv.style.top = top + "px";
-
-        // Random rotation (keeps messy feel)
-        const rotation = Math.random() * 40 - 20;
-        photoDiv.style.transform = `rotate(${rotation}deg)`;
-
-        // Maintain your random animation timing
-        photoDiv.style.animationDelay = Math.random() * 2 + 's';
-
-        // Random stacking
-        photoDiv.style.zIndex = Math.floor(Math.random() * 10);
-
-        const img = document.createElement("img");
-        img.src = photo;
-        img.alt = "Memory";
-        photoDiv.appendChild(img);
-
-        photoCollage.appendChild(photoDiv);
-    });
-}
-
-
-        // Initialize photo collage
         createPhotoCollage();
 
         // Change layer
@@ -573,38 +807,42 @@
             
             isAnimating = true;
             
-            // Hide swipe hint after first swipe
             if (currentIndex === 0) {
                 swipeHint.classList.add('hidden');
             }
             
-            // Pause current video
             const currentLayer = layers[currentIndex];
             if (currentLayer.classList.contains('video-layer')) {
                 const video = currentLayer.querySelector('video');
                 video.pause();
             }
             
-            // Remove active class
             currentLayer.classList.remove('active');
-            
-            // Update index
             currentIndex = newIndex;
             
-            // Add active class to new layer
             const newLayer = layers[currentIndex];
             newLayer.classList.add('active');
             
-            // Play new video if it's a video layer
             setTimeout(() => {
                 playCurrentVideo();
                 isAnimating = false;
             }, 100);
+
+            // Handle balloons and question box
+            if (newIndex === 6) {
+                setTimeout(() => {
+                    startBalloons();
+                    showQuestionBox();
+                }, 500);
+            } else if (currentIndex === 6) {
+                stopBalloons();
+                hideQuestionBox();
+                angryCatsContainer.innerHTML = '';
+            }
         }
 
         // Touch events
         document.addEventListener('touchstart', (e) => {
-            startMusic();
             touchStartY = e.touches[0].clientY;
         });
 
@@ -613,9 +851,7 @@
             handleSwipe();
         });
 
-        // Mouse events for testing on desktop
         document.addEventListener('mousedown', (e) => {
-            startMusic();
             touchStartY = e.clientY;
         });
 
@@ -624,23 +860,19 @@
             handleSwipe();
         });
 
-        // Handle swipe
         function handleSwipe() {
             const swipeDistance = touchStartY - touchEndY;
             const minSwipeDistance = 50;
             
             if (Math.abs(swipeDistance) > minSwipeDistance) {
                 if (swipeDistance > 0) {
-                    // Swiped up - go to next
                     changeLayer(1);
                 } else {
-                    // Swiped down - go to previous
                     changeLayer(-1);
                 }
             }
         }
 
-        // Start first video
         playCurrentVideo();
 
         // Create confetti
@@ -661,14 +893,12 @@
             }
         }
 
-        // Start confetti
         createConfetti();
         setInterval(createConfetti, 5000);
 
         // Balloons animation
         function createBalloon() {
             const balloons = ['🎈', '🎈', '🎈', '🎈', '🎈'];
-            const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'pink'];
             const balloon = document.createElement('div');
             balloon.className = 'balloon';
             balloon.textContent = balloons[Math.floor(Math.random() * balloons.length)];
@@ -683,7 +913,6 @@
             }
         }
 
-        // Start balloons when reaching final layer
         let balloonsInterval;
         function startBalloons() {
             if (!balloonsInterval) {
@@ -719,10 +948,8 @@
         const noButton = document.getElementById('noButton');
         const angryCatsContainer = document.getElementById('angryCats');
 
-        // Initially hide question box
         questionBox.style.display = 'none';
 
-        // Show question box when reaching last layer
         function showQuestionBox() {
             questionBox.style.display = 'block';
         }
@@ -731,31 +958,25 @@
             questionBox.style.display = 'none';
         }
 
-        // Yes button click
         yesButton.addEventListener('click', () => {
             questionText.textContent = "Yay! I knew it! 🥰💕";
             questionText.style.color = '#0f0';
             noButton.style.display = 'none';
             yesButton.textContent = '💖';
             
-            // Celebration effect
             for (let i = 0; i < 30; i++) {
                 setTimeout(() => createConfetti(), i * 50);
             }
         });
 
-        // No button click
         let noClickCount = 0;
         noButton.addEventListener('click', () => {
-            // Change question text
             const randomText = questionTexts[Math.floor(Math.random() * questionTexts.length)];
             questionText.textContent = randomText;
             
-            // Add angry cat
             const cat = document.createElement('div');
             cat.className = 'angry-cat';
-            cat.textContent = '😾'; // You can replace this with img tags for your PNG files
-            // For custom images, use: cat.innerHTML = '<img src="angry-cat-1.png" style="width:100%;height:100%;">';
+            cat.textContent = '😾';
             
             cat.style.left = Math.random() * 80 + 10 + '%';
             cat.style.top = Math.random() * 70 + 20 + '%';
@@ -764,33 +985,107 @@
             
             noClickCount++;
             
-            // Make YES button bigger after some clicks
             if (noClickCount > 3) {
                 yesButton.style.fontSize = (1.2 + noClickCount * 0.2) + 'rem';
                 yesButton.style.padding = (12 + noClickCount * 2) + 'px ' + (30 + noClickCount * 5) + 'px';
             }
         });
+// DICE FUNCTIONALITY
+const cube = document.getElementById('cube');
+const rollButton = document.getElementById('rollButton');
+const videoModal = document.getElementById('videoModal');
+const videoPlayer = document.getElementById('videoPlayer');
+const closeModal = document.getElementById('closeModal');
+const modalTitle = document.getElementById('modalTitle');
 
-        // Modified changeLayer to handle balloons and question box
-        const originalChangeLayer = changeLayer;
-        changeLayer = function(direction) {
-            const newIndex = currentIndex + direction;
+// Replace YOUR_VIDEO_ID with actual Google Drive video IDs
+const videoUrls = {
+    1: 'https://drive.google.com/file/d/1Rc89dGKDEaCRtm3FRmAPr6FcpS4VB64M/preview',
+    2: 'https://drive.google.com/file/d/12L538Q_QCydKjUEnBCY0QO9Gmar2bLFj/preview',
+    3: 'https://drive.google.com/file/d/1hls9ZHUqPksseSmkEpt_Lpn8g15wFYdM/preview',
+    4: 'https://drive.google.com/file/d/1lMfWCEWuMT2F1Q4DPYwR097lssWjKN5p/preview',
+    5: 'https://drive.google.com/file/d/1l-Wx3KA9IdTdNqWJgnxSR_Ie3G9Bk46n/preview',
+    6: 'https://drive.google.com/file/d/1hBhfe91sSc8QhYS7bLAfCK1USh845EVR/preview'
+};
+
+const diceRotations = {
+    1: 'translateZ(-100px) rotateY(0deg) rotateX(0deg)',
+    2: 'translateZ(-100px) rotateY(-180deg) rotateX(0deg)',
+    3: 'translateZ(-100px) rotateY(-90deg) rotateX(0deg)',
+    4: 'translateZ(-100px) rotateY(90deg) rotateX(0deg)',
+    5: 'translateZ(-100px) rotateY(0deg) rotateX(-90deg)',
+    6: 'translateZ(-100px) rotateY(0deg) rotateX(90deg)'
+};
+
+let currentFace = 1;
+
+rollButton.addEventListener('click', () => {
+    const randomFace = Math.floor(Math.random() * 6) + 1;
+    
+    // Disable button during roll
+    rollButton.disabled = true;
+    rollButton.style.opacity = '0.5';
+    
+    // Stop floating animation
+    cube.style.animation = 'none';
+    
+    // Random spin animation with more rotations
+    let rotationX = Math.random() * 360;
+    let rotationY = Math.random() * 360;
+    const spinDuration = 40;
+    const totalSpins = 35;
+    let currentSpin = 0;
+    
+    // Fast spinning with no transition
+    cube.style.transition = 'none';
+    
+    const spinInterval = setInterval(() => {
+        rotationX += 80 + Math.random() * 60;
+        rotationY += 80 + Math.random() * 60;
+        cube.style.transform = `translateZ(-100px) rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        
+        currentSpin++;
+        
+        if (currentSpin >= totalSpins) {
+            clearInterval(spinInterval);
             
-            // Check if moving to or from last layer
-            if (newIndex === 6) {
+            // Apply smooth transition for landing
+            cube.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            
+            // Land on the final face
+            setTimeout(() => {
+                cube.style.transform = diceRotations[randomFace];
+                currentFace = randomFace;
+                
+                // Re-enable button and restart float animation
                 setTimeout(() => {
-                    startBalloons();
-                    showQuestionBox();
-                }, 500);
-            } else if (currentIndex === 6) {
-                stopBalloons();
-                hideQuestionBox();
-                // Clear angry cats
-                angryCatsContainer.innerHTML = '';
-            }
-            
-            originalChangeLayer(direction);
-        };
-    </script>
+                    rollButton.disabled = false;
+                    rollButton.style.opacity = '1';
+                }, 800);
+            }, 50);
+        }
+    }, spinDuration);
+});
+
+document.querySelectorAll('.cube-face').forEach(face => {
+    face.addEventListener('click', (e) => {
+        const videoNum = e.currentTarget.getAttribute('data-video');
+        modalTitle.textContent = `Song #${videoNum}`;
+        videoPlayer.src = videoUrls[videoNum];
+        videoModal.classList.add('show');
+    });
+});
+
+closeModal.addEventListener('click', () => {
+    videoModal.classList.remove('show');
+    videoPlayer.src = '';
+});
+
+videoModal.addEventListener('click', (e) => {
+    if (e.target === videoModal) {
+        videoModal.classList.remove('show');
+        videoPlayer.src = '';
+    }
+});    </script>
 </body>
-</html>
+</html> 
